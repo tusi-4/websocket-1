@@ -1,5 +1,10 @@
 {
   'use strict';
+  
+  const socket = io();
+
+  socket.on('message', ({ author, content }) => addMessage(author, content));
+  socket.on('newUser', ({ author, content }) => addMessage(author, content));
 
   const loginForm = document.getElementById('welcome-form'),
   messagesSection = document.getElementById('messages-section'),
@@ -18,6 +23,7 @@
       userName = userNameInput.value;
       loginForm.classList.remove('show');
       messagesSection.classList.add('show');
+      socket.emit('login', { name: userName, id: socket.id})
     }
   }
 
@@ -44,9 +50,11 @@
       alert('Please write your message!');
     } else {
       addMessage(userName, messageContentInput.value);
+      socket.emit('message', { author: userName, content: messageContentInput.value });
       messageContentInput.value = '';
     }
   }
 
   addMessageForm.addEventListener('submit', sendMessage);
+
 }
