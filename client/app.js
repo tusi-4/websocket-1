@@ -5,6 +5,7 @@
 
   socket.on('message', ({ author, content }) => addMessage(author, content));
   socket.on('newUser', ({ author, content }) => addMessage(author, content));
+  socket.on('leavingUser', ({ author, content }) => addMessage(author, content));
 
   const loginForm = document.getElementById('welcome-form'),
   messagesSection = document.getElementById('messages-section'),
@@ -23,7 +24,8 @@
       userName = userNameInput.value;
       loginForm.classList.remove('show');
       messagesSection.classList.add('show');
-      socket.emit('login', { name: userName, id: socket.id})
+      socket.emit('login', { name: userName, id: socket.id});
+      socket.emit('newUser', {author: 'Chat Bot', content: userName + ' has joined the conversation!'});
     }
   }
 
@@ -34,6 +36,9 @@
     message.classList.add('message', 'message--received');
     if(author == userName){
       message.classList.add('message--self');
+    }
+    if(author == 'Chat Bot'){
+      message.classList.add('chat-bot');
     }
     message.innerHTML = `
       <h3 class="message__author">${author == userName ? 'You' : author}</h3>

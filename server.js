@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('newUser', (message) => {
-    socket.broadcast.emit('newUser', ({author: 'Chat Bot', content: login + ' has joined the convo'}));
+    socket.broadcast.emit('newUser', message);
   })
 
   socket.on('message', (message) => { 
@@ -40,6 +40,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => { 
     console.log('Oh, socket ' + socket.id + ' has left');
+    socket.broadcast.emit('leavingUser', ({author: 'Chat Bot', content: leavingUser + ' has left the conversation... :('}));
     users.splice(users.indexOf(socket.id, 1));
   });
   console.log('I\'ve added a listener on message and disconnect events \n');
