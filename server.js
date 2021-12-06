@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
     });
 
     function userLeaving(user){
-      return user == leavingUser[0];
+      return user.id === leavingUser[0].id;
     }
     users.splice(users.findIndex(userLeaving), 1);
     socket.broadcast.emit('leavingUser', ({author: 'Chat Bot', content: `${leavingUser[0].name} has left the conversation... :(`}));
