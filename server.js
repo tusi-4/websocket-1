@@ -40,8 +40,12 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => { 
     console.log('Oh, socket ' + socket.id + ' has left');
-    socket.broadcast.emit('leavingUser', ({author: 'Chat Bot', content: leavingUser + ' has left the conversation... :('}));
+    let leavingUser = users.filter(function(user){
+      return user.id = socket.id;
+    }
+  );
     users.splice(users.indexOf(socket.id, 1));
+    socket.broadcast.emit('leavingUser', ({author: 'Chat Bot', content: `${leavingUser[0].name} has left the conversation... :(`}));
   });
   console.log('I\'ve added a listener on message and disconnect events \n');
 });
