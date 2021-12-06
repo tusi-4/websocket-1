@@ -41,10 +41,10 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => { 
     console.log('Oh, socket ' + socket.id + ' has left');
     let leavingUser = users.filter(function(user){
-      return user.id = socket.id;
-    }
-  );
-    users.splice(users.indexOf(socket.id, 1));
+      return user.id === socket.id;
+    });
+    // czy skoro wiem, że leavingUser jest tablicą z jednym obiektem, to mogę z tej informacji w taki sposób skorzystać, żeby usunąć usera?
+    users.splice(leavingUser[0], 1);
     socket.broadcast.emit('leavingUser', ({author: 'Chat Bot', content: `${leavingUser[0].name} has left the conversation... :(`}));
   });
   console.log('I\'ve added a listener on message and disconnect events \n');
